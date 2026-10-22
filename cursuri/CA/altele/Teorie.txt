@@ -1,0 +1,433 @@
+#Curs 1 - Sistemul de memorie
+
+Memoria principala:
+    - SRAM (cache)
+    - DRAM (main)
+    - flash (non-volatile)
+
+* DRAM :
+    - biti stocati in matrici bidimensionale pe chip (fiecare chip are cate 4-8 bancuri logice
+iar fiecare banc este o matrice de biti)
+
+    - incapsularea:
+        * DIMM (Dual Inline Memory Module) contine chipuri cu semnalele de ceas/control/adresa
+        conectate in paralel
+        * pini de date lucreaza pt a returna un cuvant intreg
+
+
+* SRAM :
+    - memorie cu stocare volatila 
+    - structura de bistabil flip-flop
+    - nu necesita cicli de refresh
+    - viteza mai mare de S/C fata de DRAM
+    - costuri de fabricatie mai mari
+
+    -chip = 2^h * g biti si  simbolul lui echivalent în schema electrică.
+    
+    Semnale:
+        - WE daca este activ va face ca datele sa se scrie in adresa curenta
+    de pe magistrala de in
+        - altfel, adresa respectiva va duce la citirea din memorie
+    si punerea pe iesire daca OE este activat
+        - CS (Chip Select) activeaza sau dezactiveaza functionarea chipului
+
+! DRAM contine un sg tranzistor si este mult mai simplu de fabricat, dar SRAM este
+de capacitate mai mare si mai densa 
+
+Problema : 
+    O memorie DRAM de 256 Mb e organizată ca 32M x 8 intern și 16K x 16K externa. Rândurile trebuie
+reîmprospătate cel puțin la fiecare 50ms pentru a nu pierde datele; refresh-ul pentru o coloană
+durează 100ns. Cât % din lățimea totală de bandă este pierdută cu ciclii de refresh?
+    Refresh pt toate 16k randuri => 16 * 1024 * 100 ns = 1.64 ms se pierd la fiecare 50 ms 
+    => 1.64 / 50 = 3.3% pierdere din latimea de banda
+
+! Densitatea si capacitatea memporiei au crescut odata cu puterea si complexitatea
+CPU, dar viteza memoriei nu a tinut pasul -> practic timpul de procesare este limitat de accesul la memorie
+si desi folosirea unei memorii rapide rezolva problema vitezei, memoriile rapide sunt costisitoare si nu au
+capacitate mare de stocare -> se folosesc 2 sau 3 niveluri de cache ca sa mearga bine
+    Rezolvare: citim m m date din memorie la fiecare acces
+
+* Memoria ne-volatila 
+    - ROM/ PROM/ EPROM -> Read-only memory -> fol diode, prezenta diodei = 1, absenta diodei = 0
+    - EEPROM sau Flash -> fiecare celula contine un tranzistor MOS cu poarta flotanta
+
+
+
+* Disk Memory 
+    Timpul de acces :
+        - timpul de cautare -> 0-10 ms (trb capul de citire sa se puna deasupra zonei de citire)
+        - timpul de rotatie -> 0-10 ms
+        - timpul de transfer -> < 1 ms 
+
+    Alternative mai rapide: Disk Arrays si RAID
+        - RAID0 -> m m discuri care ofera stocare marita
+        - RAID1 -> din cele 6, 3 sunt fol pt stocare si 3 copiaza info pt siguranta in caz de pierdere
+        - RAID2 -> 4 disk-uri dintre care unul este parity-disk fol pt recuperarea info
+        - RAID3, RAID4, RAID5, RAID6 progreseaza treptat pt redundanta
+
+    Discuri optice -> vedere simplificata a inreg si mecanismul de acces la date pt CD-ROM sau DVD-ROM
+
+
+#Curs 2 - Memoria cache
+
+    Exemplu sugestiv pt diferenta dintre capacitatea procesorului si accesul la memorie :
+        Procesor la 3GHz superscalar accesează în 100ns memoria DRAM sau poate să
+        execute 1,200 instrucțiuni în timpul unui singur acces la memorie!
+
+    ! Dimensiunea fizica afecteaza latenta -> semnalele parcurg un drum mai lung
+
+    Organizarea ierarhica a memoriei:
+        • capacitate: Registre << SRAM << DRAM
+        • latență: Registre << SRAM << DRAM
+        • lățime de bandă: on-chip >> off-chip
+
+    CPU ------- Memoria Cache SRAM (din franceza = ascunsa pt software) ---------- Memoria DRAM (stocare mare, dar lenta)
+
+    Hit rate -> cand se gaseste informatia dorita in memoria cache
+    Cache miss rate -> cand nu gaseste info dorita in memoria cache si trb sa o caute in DRAM
+
+    Daca avem un nivel cache cu rata de hit h, atunci:
+        !! Ceff = h * Cfast + (1 - h) * (Cslow + Cfast) = Cfast + (1 - h) * Cslow
+
+    Parametrii memoriei cache:
+        - size cache (in octeti sau cuvinte)
+        - size bloc sau linie -> o linie mai mare inseamna aducerea mai multa de info la un miss 
+        - placement policy -> determinarea locului unde o linie cache este plasată
+        - replacement policy -> determinarea blocului din cache ales pentru suprascriere
+        - write policy -> determină dacă actualizările în cache sunt transmise imediat memoriei principale (write-through) sau
+    blocurile modificate sunt copiate înapoi în memoria principală atunci când trebuie copiate (write-back sau copy-back)
+
+
+    Sabloane de acces la memorie:
+        - instruction fetches (n loop iteration)
+        - acces la stiva
+        - acces de date -> acces scalar (doar o adresa)
+                        -> acces vectorial 
+
+    Două proprietăți previzibile ale referințelor la memorie:
+        • Localitate temporală: Dacă o locație de memorie este
+    accesată, este foarte probabil ca aceeași locație de memorie să
+    fie accesată și în viitorul apropiat.
+        • Localitate spațială: Dacă o locație de memorie este accesată,
+    este foarte probabil ca programul să acceseze și locațiile din
+    imediata vecinătate în viitorul apropiat.
+
+
+    !! exemplu: pentru un procent h din cazuri, accesul se face de 6 ori mai repede => speedup = 1 / (1 - h + h / 6)
+    !! niciun speedup nu poate depasi 1 / (1 - h)
+
+    Tipurile de miss:
+        - compulsary miss -> miss-uri obligatorii care se pot evita o parte prin prefetching (de ex cand avem primul acces la o resursa, sigur e miss)
+        - capacity miss -> se face debarasare de anum date pentru a face loc altora noi, din cauza memoriei cache limitate 
+        - conflict miss -> daca scoatem date utile in viitor pt a aduce date noi actual (depinde de strategia de alocare/ mapare)
+
+    Tipuri de mapare:
+        - directa = fiecare linie este considerata ca fiind un set si se calc set-ul pt linia noua ca fiind  nr_linie % nr_seturi
+        - asociativa -> complet asociativa = linia noua poate sa vina oriunde in memoria cache
+                     -> set-asociativa (2-way) = fiecare set are cate n linii fiecare si linia noua poate sa vina oriunde in nr_linie % nr_seturi (se alege setul)
+        
+    !! Problema:
+        !!! Pentru mapare directa
+            Descrieți adresarea unei memorii cache cu adrese pe 32 de biți, cu datele
+            accesibile la nivel de octet. Linia de cache are o lățime W = 16 B.
+            Dimensiunea cache L = 4096 linii (64 KB = 4096 * 16).
+
+            Poziția unui octet în linie este codificată pe log16 = 4 b  ->> iti da pozitia din linie unde se gaseste info
+            Adresa de index a unei linii de cache este log4096 = 12 b  ->> iti da linia din cache la care se gaseste info
+            Rămân 32 - 12 - 4 = 16 b pentru etichetă.
+
+        !!! Pentru mapare set-asociativa
+            * Descrieți schema de adresare pentru o memorie adresabilă la nivel de octet
+            cu adrese pe 32 de biți. Lățimea liniei de cache 2W = 16 B.
+            Mărimea setului 2S = 2 linii.
+            Mărimea cache 2L = 4096 linii (64 KB).
+
+            Adresa unui octet din linie log16 = 4 b.
+            Adresa de index într-un set cache (log4096/2) = 11 b.
+            Rămân 32 - 11 - 4 = 17 b pentru etichetă.
+
+            * Un cache set-asociativ de 64 KB eight-way (cu opt seturi) este adresabil la
+            nivel de octet și conține linii de 32 de octeți. Adresele de memorie au 32
+            de biți
+
+            Adresa pt octeti din linie log32 = 5b
+            Adresa de index intr-un set (log4096 / 8) = 9b
+            Raman 32 - 5 - 9 = 18 b pentru eticheta
+
+#Curs 3 - Memoria cache part 2
+
+    CPU addres = Line addres + Offset 
+    ! mai multe linii => mai multe conflicte
+
+    Pentru mapare asociativa -> politica de inlocuire: !! efect de ordin secundar pt ca se realizeaza doar la un cache miss
+        - random
+        - LRU (Least Recently Used) -> trb actualizat dupa fiecare acces
+        - FIFO / Round Robert -> fol in complet asociativ
+        - NMRU (Not most recently used)
+
+     !!! Timpul mediu de acces la memorie (AMAT - Average Memory Acces Time) -> hit_time + miss_rate * miss_penalty 
+
+    -----------
+    Cache de dimensiune mare:
+        + reduce miss-urile de capacitate si conflict
+        - creste hit time (pentru ca se transfera mai greu datele de la cache la memoria principala)
+
+    Asociativitate marita:
+        + reduce miss-urile de conflict
+        - poate sa mareasca hit time
+    
+    Linii de dimensiuni mai mari:
+        + reduce miss-urile obligatorii si de capacitate 
+        - creste miss-urile de conflict si penalizarile pt un miss pt ca functia de cautare este mai complexa
+
+    !!! Problema:
+        Un program are 2000 de operații load și store. 1250 de date sunt aduse de aceste operații în cache.
+        Restul sunt luate din alte locații de memorie din afara cache.
+
+        Hit rate = 1250 / 2000 = 0.625
+        miss rate = 750 / 2000 sau 1 - Hit rate = 0.375
+
+        Problema2:
+        Cunoastem tcache = 1 ciclu, tMM = 100 cicli, miss_rate = 0.375
+        AMAT = hit_rate + miss_rate * miss_penalty = 1 + 0.375 * 100 = 38.5 ciclii
+
+
+    Algoritmi de write-back: 
+        Cache hit:
+            - write-through -> actualizarile din cache sunt facute automat si in memoria RAM 
+            - write-back -> scrie in cache si actualizeaza in memoria principala 
+        doar cand linia este invalida. Fiecare linie contine un flag de "dirty" care marcheaza
+        faptul ca linia trb actualizata
+
+        Cache miss:
+            - no write allocate -> scrie doar inapoi in RAM
+            - write allocate -> face fetch in cache
+
+
+    Politica de incluziune pt mai multe nivele de cache:
+        - inclusive multilevel cache -> cache-ul interior contine liniile prezente si in cel exterior
+    iar mentinerea coerentei se face prin accese la cache-ul exterior (snooping)
+        - exclusive multilevel cache -> cache-ul interior nu contine liniile prezente si in cel exterior
+    iar la un miss se face switch intre linii
+
+
+    Prefetching: speculeaza care vor fi urmatoarele accese la instructiuni si date si le incarca in cache
+    Tipuri de prefetching:
+        - de hardware -> prefetch on miss = prefetch la b+1 daca miss b
+                      -> OBL (One Block Lookahead) = prefetch la b+1 cand accesam b si poate fi extins la N blocuri
+                      -> strided = pt o secventa de accese de tipul b, b + N, b + 2*N, se incarca b + 3*N 
+        - de software 
+        - mixate
+    Probleme prefetch:
+        - timing -> daca se face prefetch prea aproape de mom necesitatii, e posibil sa fie prea tarziu
+                 -> daca se face prea devreme, poluam cache
+
+
+#Curs 4 - Memoria virtuala (lucreaza atat cu RAM cat si cu memoria secundara)
+    - Creeaza iluzia unei memorii mai mari
+    - Este mapata peste RAM si hard drive -> este lenta, mare si ieftina
+
+    De la memoria virtuala la memoria principala prin pagini.
+
+    !! Adresele virtuale se afla pe hard-drive
+    !! Programele folosesc adrese virtuale 
+    !! CPU translateaza adresele virtuale in adrese fizice (DRAM)
+    !! Fiecare program are propria mapare de la adrese virtuale la adrese fizice => programele pot folosi 
+    aceeasi adresa pt a accesa date complet diferite
+
+    Tabela de pagini = lookup table folosit pentru translatarea ad virtuale in ad fizice -> contine adresa fizica pentru
+    inceputul fiecarei pagini
+
+    Probleme tabela de pagini:
+        - este prea mare
+        - load/store necesita 2 accese la memoria principala -> unul pt translatie, unul pt acces date
+
+    Nu si daca facem lucrurile destept 
+    -> TLB (Translation Lookaside Buffer) :
+        - un cache separat pentru translatare care contine cele mai recente translatii
+        - are 16-512 intrari
+        - complet asociativ 
+        - 99% hit rate
+        - random sau FIFO replacement policy
+
+
+#Curs 5 - Memoria virtuala part 2
+
+    MMU = Management Memory Unit -> face managementul memoriei pt memoria virtuala - memoria fizica
+    TLB este incorporat in MMU 
+
+    Organizare cache DRAM:
+        - dimensiuni mari ale paginilor 
+        - complet-asociativ
+        - algoritmi de inlocuire sofisticati si costisitori (prea complicat de implem doar in hardware)
+        - write-back
+
+    Translatarea adreselor cu tabela de pagini:
+        - page hit -> referinta la un cuvant din memoria virtuala care exista in memoria fizica (are bitul de validitate pe 1)
+        - page miss -> ' - ' - nu exista in memoria fizica
+            cauzeaza un page fault -> handler-ul de page fault va selecta o victima pt a fi evacuata din memoria fzica si readusa pe disc
+            si va aduce pagina cautata si se reporneste instructiunea de aceasta data generand page hit
+
+    working set = programele tind să acceseze un set de pagini virtuale active, numit și setul de lucru
+    !! Thrashing: Degradarea performanței când facem swap la pagini (le copiem) în continuu din memoria virtuală în fizică și invers
+    cand working set e mult mai mare decat memoria RAM
+
+
+    Exemplu: 
+        Adresa virtuala pe 14 biti
+        Adresa vizica pe 12 biti
+        Page size = 64 => 6 biti de offset 
+
+        TLB = 4-way associative => 16 intrari => 2 biti pt TLBI = TBL Index 
+
+        Adresa virutala = impartit in - VPN (Virtual page number)  format din:
+                                                                                    - TLBT (Tag)
+                                                                                    - TLBI
+                                              - VPO (Virtual page offset)
+
+        Adresa fizica = impartita - PPN (Physical Page Number)
+                                  - PPO (Physical Page Offset) format din:
+                                                                        - CI (Cache Index) 2 biti
+                                                                        - CO (Cache Offset) 4 biti
+
+                            TLBT      TLBI
+        Pt  0x03D4  => 0 0 0 0 1 1    1 1          0 1 0 1 0 0
+                                 VPN                   VPO
+
+        => TLBT = 3 
+           TLBI = 0x03  => valoarea 3 din set-ul 3 al TLB-ului
+
+        => CO = 0 
+           CI = 5 => valoarea 0 din set-ul 5 al cache-ului
+
+
+#Curs 6 - Dispozitive periferice
+
+    Device = un hardware care este vizibil din software
+
+    Sisteme I/O embedded -> microcontroller AVR -> procesor 8 biti, arhitectura RISC
+
+    I/O Serial:
+        - SPI (Serial Peripheral Interface) -> Foloseste Master-Slave 
+        - UART (Universal Asyncronous Receiver/Transmitter)
+
+    PWM (Pulse Width Modulation) -> valoarea medie este prop cu factorul de umplere(= cat % din durata unui semnal periodic este 1) 
+
+    Sisteme I/O pt Personal Computers (PC)
+        - USB (Universal Serial Bus)
+        - PCI/ PCIe
+        - DDR (Double Data Rate memory)
+        - SATA - interfata pt hard drive
+
+#Curs 7 - Dispozitive periferice part 2
+
+    Magistrala = legatura partajata de comunicatie
+    Avantaje:
+        - versatilitate -> se adauga usor dispozitive noi
+        - cost redus -> un sg fir de legatura partajat pt toate perifericele
+
+    Dezavantaje:
+        - gatuirea comunicatiei -> daca un device este mai lent, trb sa astepte dupa el
+        - viteza este limitata de lungimea magistralei, nr de dispoz de pe magistrala, latente diferite etc
+
+    Organizare:
+        - linii de control -> fol sa indice ce info se afla pe magistrala
+        - linii de date -> transf info de la sursa la dest
+
+    Master vs Slave -> Master este cel care incepe tranzactia, tranzactia se face in 2 pasi
+        - emiterea comenzii
+        - transfer de date
+
+    Tipuri de magistrale:
+        * Procesor-Memorie -> scurta si de viteza mare
+            - pt transferuri de tip rafala
+            - conectat direct la procesor
+        * I/O -> lungime mai mare si mai lenta
+        * Backplane Bus -> permite procesoarelor, memoriei si dispoz I/O sa coexiste
+        * Serial
+
+        !! Backplane Bus are o sg magistrala
+
+    Trecerea de la I/O Paralel la I/O Serial
+        - paralel -> frecventa ceasului este limitata de lungimea magistralei 
+                  -> consum de energie mare pt a conecta un nr mare de periferice
+                  -> conectori scumpi
+
+        De aceea se trece la 
+        - serial punct-la-punct -> fol codificari avansate pt ceas
+                                -> putere mica avand o sg leg de date cu un sg periferic
+                                -> SATA, USB, Firewire
+                                -> conectori ieftini
+
+    Diagrama interconexiunilor unei placi de baza:
+        - Northbridge -> gestiune memorie, grafica
+        - Southbridge I/O -> Disk controllers, USB controllers, Audio
+
+
+    !! Registrele I/O sunt metoda prin care procesorul comunica cu perifericele
+    !! Nu se comporta ca un RAM
+
+    !! Accesul la registrele I/O trebuie sa nu implice memoria cache
+    Se foloseste un handling in MMU si registrele au un flag special "no cache"
+
+
+    polling = CPU face busy-waiting inainte de fiecare send/recv
+
+    DMA (Direct Memory Access) -> ocoleste CPU si transf datele direct de la I/O la memorie
+    Avantaje: separa transf de date de procesarea de date
+    Dezavantaje: overhead mare pt transf de date foarte mici
+
+    !! Adresele DMA sunt fizice
+
+    !! PCI este un arbore -> s-a ocupat de rezolvarea organizarii dispoz I/O si recunoasterea lor ceva de genul
+    !! PCI permite Bus Mastering 
+
+
+#Curs 8 - Magistrale si arhitecturi de calcul 
+
+    Problema:
+        Un bus sincron are o perioadă de ceas de 50ns și fiecare transmisie durează un ciclu de ceas. Alt bus asincron are
+        nevoie de 40ns pentru fiecare handshake. Fiecare bus are 32 de biți de date. Care este lățimea de bandă a fiecărui bus
+        pentru citiri de un cuvânt dintr-o memorie cu 200ns per read.
+
+        Sincron:
+            trimite adresa la memorie -> 50ns    |
+            citeste memoria -> 200ns             |  => 300ns
+            trimite datele la dispozitiv -> 50ns |
+
+            Latime maxima pt 4 octeti (32 / 8 = 4) la 300ns => 4 / 300 * 10^3 = 13.3 MB/s
+
+
+        Asincron:
+            citirea memoriei -> 40ns                                    |
+            2,3,4 data ready si handshake max(3 * 40ns, 200ns) = 200ns  |   => 360
+            5,6,7 read and ack 3 * 40ns = 120ns                         |
+        Latime maxima 4 octeti la 360ns => 4 / 360 * 10^3 = 11.1 MB/s
+
+    Arbitrarea magistralei -> coordoneaza utiliz magistralei folosind mecanisme  de request, grant, release 
+    Tehnici de arbitrare:
+        - Distributed arbitration by self-selection:
+            se face request pt a det cui i se da acces, au un cod de prioritate si cele cu prioritate mai mica
+         cedeaza bus-ul celor cu ea mai mare
+
+         - Distributed arbitration by collision detection
+            cererile simultane produc coliziuni si se face alg de selectie intre entitatile care au facut coliziune
+
+         - Daisy chain arbitration
+            dispoz cu prioritate mai mare arbitreaza cererile dispoz cu prioritate mai mica -> duce la starvation pt cele cu prioritate mica
+
+    !!! Sistemul de operare are rol de interfata intre I/O hardware si programe
+        Responsabilitate:
+            - protectie pt resursele I/O partajate
+            - abstractizarea pt accesarea dispoz
+        SO trb sa stie cand dispoz au terminat o operatie sau cand au intalnit o eroare
+
+    
+#Curs 9 - ILP & Superscalar 
+
+    FPU = Floating Point Unit
+
+    Pentru a folosi concurent mai multe FPU-uri, trebuie să avem nevoie de o tabelă de registre dedicată (FPR) care să aibă mai multe
+porturi de citire și de scriere.
+
+    

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <style>
+    html * {
+    font-size: 0.97em !important;
+    }
+
+    .quizDiv {
+        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+        text-align: center;
+        width: 97%;
+        margin: auto;
+
+    }
+
+    .btn {
+        padding: 9px;
+    }
+
+    .btn-light {
+        background-color: #EFEFEF;
+        color:black;
+        outline: none !important;
+        border: 0px;
+    }
+
+    .btn,
+    .btn-block {
+        padding-left: 4.8%;
+        padding-right: 4.8%;
+        margin: auto;
+        white-space: normal;
+    }
+
+
+
+    div {
+        padding-bottom: 8px;
+        padding-top: 8px;
+    }
+    .question {
+        padding-top: 15px;
+        padding-bottom: 15px;
+        padding-left: 4px;
+        padding-right: 4px;
+        margin-bottom: 0px;
+    }
+
+    .quizDiv {
+        margin-bottom: 20px;
+    }
+    .feedback {
+        font-weight: bold;
+        font-size: 1.7em;
+        display:none;
+    }
+    .makeOpaque {
+        opacity: 0.60;
+    }
+    .btn-success, .btn-success:focus {
+        background: linear-gradient(
+        to right, 
+        #198754 0%, 
+        #198754 5%, 
+        #EFF4EF 5%, 
+        #EFF4EF  95%,
+        #198754 95%,
+        #198754 100%
+    );
+    color:black;
+    outline: none !important;
+    border: 0px;
+    }
+
+    .btn-secondary, .btn-secondary:focus {
+        background: linear-gradient(
+        to right, 
+        #adb5bd 0%, 
+        #adb5bd 5%, 
+        #EFEFEF 5%, 
+        #EFEFEF  95%,
+        #adb5bd 95%,
+        #adb5bd 100%
+    );
+    color:black;
+    outline: none !important;
+    border: 0px;
+    }
+
+    .btn-danger, .btn-danger:focus {
+        background: linear-gradient(
+        to right, 
+        #dc3545 0%, 
+        #dc3545 5%, 
+        #F4EFEF 5%, 
+        #F4EFEF  95%,
+        #dc3545 95%,
+        #dc3545 100%
+    );
+    color:black;
+    outline: none !important;
+    border: 0px;
+    }
+
+
+    .btn-warning, .btn-warning:focus {
+        background: linear-gradient(
+        to right, 
+        #ffc107 0%, 
+        #ffc107 5%, 
+        #EFEFEA 5%, 
+        #EFEFEA  95%,
+        #ffc107 95%,
+        #ffc107 100%
+    );
+        color:black;
+        outline: none !important;
+        border: 0px;
+    }
+
+
+    .btn:focus,.btn:active:focus,.btn.active:focus,
+    .btn.focus,.btn:active.focus,.btn.active.focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+    img {
+        max-width: 100%;
+        display:block;
+        margin: auto;
+    } 
+
+    button:not(.filterButton) {
+        width: 98%;
+    }
+
+    .filterButton {
+        border-radius: 10px;
+        margin-top: 1px;
+    }
+    .filterDiv {
+        max-width:97.5%;
+        margin: auto;
+        margin-top: 1px;
+    }
+    .pointerNone {
+        pointer-events: none;
+    }
+    .explanation {
+        padding-left: 8px;
+        padding-right: 8px;
+        margin-bottom: 0px;
+    }
+    .btn-white {
+        background-color: white;
+    }
+    </style>
+</head>
+<body>
+
+
+
+
+    <script>
+        document.body.onload = addElement;
+        function addElement() {
+var RIGHTS={0:{question:"Accesul la o stivă exploatează:",rights:["Localitatea spațială"],wrongs:["Niciuna","Localitatea temporală","Nu se poate determina","Ambele localități"],feedback:"Stivele sunt ținute contiguu în memorie și sunt accesate, în general, secvențial. Asta înseamnă că, dacă am accesat o adresă din stivă, este probabil să vrem să accesăm și adresele următoare sau precedente."},1:{question:"Avem un sistem de calcul cu două niveluri de cache (L1 și L2). Dacă înlăturăm nivelul L2 de cache, cum se va modifica L1 hit time?",rights:["Nu se modifică"],wrongs:["Crește","Depinde de L2 hit time","Scade","Nu se poate calcula"],feedback:"L1 hit time este timpul de acces la o adresă ce este deja in L1 cache, deci nu este influențat de L2 cache."},2:{question:"Avem un sistem de calcul cu un singur nivel de cache (L1). Dacă adăugam un al doilea nivel de cache (L2), cum se vor modifica următorii\nparametri de funcționare: L1 hit time, L1 miss rate, L1 miss penalty?",rights:["L1 hit time neschimbat, L1 miss rate neschimbat, L1 miss penalty scade"],wrongs:["L1 hit time scade, L1 miss rate crește, L1 miss penalty scade","L1 hit time crește, L1 miss rate scade, L1 miss penalty scade","L1 hit time neschimbat, L1 miss rate neschimbat, L1 miss penalty crește","L1 hit time scade, L1 miss rate neschimbat, L1 miss penalty scade"],feedback:"Viteza de acces în primul nivel de cache rămâne neschimbată, deci L1 hit time rămâne neschimbat. Dimensiunea și funcționarea primului nivel de cache rămân neschimbate, deci miss rate rămâne neschimbat. Cum accesul la al doilea nivel de cache este mai rapid decât accesul la RAM, miss penalty scade."},3:{question:"Bill dorește să construiască un cip de memorie de 128K x 32, dar are doar cipuri de 32K x 16. De câte cipuri are nevoie Bill?",rights:["8"],wrongs:["64","16","128","32"],feedback:"(128K / 32K) * (32 / 16) = 8"},4:{question:"Bill dorește să construiască un cip de memorie de 128K x 32, dar are doar cipuri de 8K x 16. De câte cipuri are nevoie Bill?",rights:["32"],wrongs:["128","256","64","16"],feedback:"(128K / 8K) * (32 / 16) = 32"},5:{question:"Bill dorește să construiască un cip de memorie de 1M x 64, dar are doar cipuri de 128K x 32. De câte cipuri are nevoie Bill?",rights:["16"],wrongs:["32","8","64","128"],feedback:"(1M / 128K) * (64 / 32) = 16"},6:{question:"Bill dorește să construiască un cip de memorie de 256K x 32, dar are doar cipuri de 32K x 8. De câte cipuri are nevoie Bill?",rights:["32"],wrongs:["64","16","8","128"],feedback:"(256K / 32K) * (32 / 8) = 32"},7:{question:"Bill dorește să construiască un cip de memorie de 256K x 64, dar are doar cipuri de 16K x 8. De câte cipuri are nevoie Bill?",rights:["128"],wrongs:["8","16","32","64"],feedback:"(256K / 16K) * (64 / 8) = 128"},8:{question:"Bill dorește să construiască un cip de memorie de 512K x 64, dar are doar cipuri de 16K x 8. De câte cipuri are nevoie Bill?",rights:["256"],wrongs:["16","128","64","8"],feedback:"(512K / 16K) * (64 / 8) = 256"},9:{question:"Care dintre următoarele afirmații este adevărată?",rights:["Instrucțiunea RETI activează întreruperile la nivel global"],wrongs:["Instrucțiunea SEI dezactivează întreruperile la nivel global","Instrucțiunea CLI activează întreruperile la nivel global","Instrucțiunea CALL_ISR activează întreruperile la nivel global"],feedback:""},10:{question:"Care dintre următoarele este adevărată?",rights:["Un cache set-asociativ cu o singură linie per set este un cache mapat direct"],wrongs:["Un cache set-asociativ cu un singur set este un cache mapat direct","Un cache set-asociativ cu o singură linie per set este un cache complet-asociativ","Un cache set-asociativ cu două seturi este un cache complet-asociativ","Toate variantele sunt adevărate"],feedback:"Între seturi maparea se face în mod direct. Dacă seturile au o singură linie, înseamnă ca avem mapare directă între toate liniile, deci este un cache mapat direct."},11:{question:"Care dintre următoarele este un motiv valid pentru folosirea adreselor virtuale?",rights:["Este mai dificil ca un program ce funcționează prost să afecteze alte programe concurente"],wrongs:["Permite upgrade-ul gratuit de la Windows 7 la Windows 10","Permite unui proces să acceseze întreg spațiul de memorie","Mărește rata de transfer a dispozitivelor I/O","Permite lucrul mai facil cu stiva"],feedback:"Memoria virtuală permite separarea spațiilor de adresă între programe (procese)."},12:{question:"Care dintre următoarele instrucțiuni modifică Stack Pointer?",rights:["RCALL"],wrongs:["BRBC","RJMP","BRBS"],feedback:""},13:{question:"Care dintre următoarele rămâne neschimbat la translatarea unei adrese virtuale într-o adresă fizică?",rights:["Page offset"],wrongs:["Toate variantele","Cache tag","Page number","TLB tag"],feedback:"Offset-ul în cadrul paginii rămâne același, chiar dacă adresa virtuală a paginii este diferită față de adresa fizică."},14:{question:"Care funcție de mapare cache are cele mai puține șanse să producă thrashing (adică oferă șanse minime ca două blocuri să concureze la\nstocarea în aceeași linie)?",rights:["Complet-asociativă"],wrongs:["Set-asociativă","Directă","Nu se poate determina","Toate trei"],feedback:"Cum orice linie de memorie poate intra în orice linie de cache, un cache complet-asociativ oferă cea mai bună șansă de a evita thrashing."},15:{question:"Ce dimensiune are registrul general R16 al procesorului implementat de noi?",rights:["8 biți"],wrongs:["4 octeți","32 biți","16 biți"],feedback:""},16:{question:"Ce registru ar trebui modificat pentru a configura un pin ca ieșire?",rights:["DDRA"],wrongs:["OCRA","PINA","PINA"],feedback:""},17:{question:"Ce registru are rolul de contor?",rights:["TCNT0"],wrongs:["TIMSK","TCCR0A","OCR0A"],feedback:""},18:{question:"Ce valoare are SP după execuția codului de mai jos, știind că valoarea sa inițială este 204?\n<img src='data:image/png;base64,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' />",rights:["182"],wrongs:["174","181","234","227","226"],feedback:""},19:{question:"Citirea secvențială dintr-un fișier exploatează:",rights:["Localitatea spațială"],wrongs:["Nu se poate determina","Localitatea temporală","Niciuna","Ambele localități"],feedback:"Citire secvențială înseamnă că, dacă am accesat o adresă, este probabil că vom dori să accesăm și adresele următoare."},20:{question:"Cum o să fie afectați parametrii hit time, miss rate și miss penalty dacă adăugăm capabilitatea de prefetching unui cache?",rights:["Hit time neschimbat, miss rate scade, miss penalty neschimbat"],wrongs:["Hit time creste, miss rate crește, miss penalty crește","Hit time neschimbat, miss rate crește, miss penalty crește","Hit time scade, miss rate crește, miss penalty neschimbat","Hit time scade, miss rate scade, miss penalty crește"],feedback:"Viteza de acces rămâne neschimbată, deci hit time si miss penalty ramân neschimbate. Cum funcționalitatea de prefetching va aduce date în cache înainte de a fi folosite, miss rate va scădea."},21:{question:"Dacă înjumătățim dimensiunea liniilor unui cache dar păstrăm numărul de seturi și asociativitatea neschimbate, cum se modifică miss\npenalty?",rights:["Rămâne neschimbată"],wrongs:["Se dublează","Se înjumătățește","Se triplează","Imposibil de determinat"],feedback:"Dimensiunea liniilor, numărul de seturi și asociativitatea nu influențează miss penalty. Ele vor influența miss rate, dar timpii ce acces rămâne aceeasi"},22:{question:"Decrementarea unui pointer și accesarea memoriei către care acesta pointează exploatează:",rights:["Ambele localități"],wrongs:["Nu se poate determina","Niciuna","Localitatea temporală","Localitatea spațială"],feedback:"Decrementarea presupune scrieri succesive la aceeași adresă. Asta înseamnă că, dacă am accesat o adresă, este probabil că vom dori să o accesăm din nou în curând. De aici localizarea temporală. Accesarea memorie printr-un pointer pe care îl decrementăm rezultă într-un acces secvențial. Asta înseamnă că, dacă am accesat o adresă, este probabil că vom dori să accesăm și adresele precedente. De aici localizarea spațială. Deci sunt ambele tipuri de localizare!"},23:{question:"Folosind întregul set de instrucțiuni AVR, scrieți o secvență de cod care:\n- Configurează portul A al unui microcontroller ATtiny20 ca pini de ieșire\n- Setează valoarea pinilor PA4, PA5 și PA6 să fie 0 (Low)\n- Setează valoarea celorlalți pini să fie 1 (High)\nConsiderăm:\nPINA equ 0x00\nDDRA equ 0x01\nPORTA equ 0x02",rights:["ldi R16, 0b11111111 out DDRA, R16 ldi R16, 0b10001111 out PORTA, R16"],wrongs:["ldi R16, 0b00000000 out DDRA, R16 ldi R16, 0b01110000 out PORTA, R16","ldi R16, 0b10001111 out DDRA, R16 ldi R16, 0b10001111 out PORTA, R16","ldi R16, 0b01110000 out DDRA, R16 ldi R16, 0b01110000 out PORTA, R16"],feedback:""},24:{question:"Incrementarea unei variabile exploatează:",rights:["Localitatea temporală"],wrongs:["Localitatea spațială","Ambele localități","Nu se poate determina","Niciuna"],feedback:"Incrementarea unei variabile presupune scrieri repetate la aceeași adresă. Deci, dacă am accesat acea adresă este probabil că vom dori să o accesăm din nou în curând."},25:{question:"Instructiunea SBI 7, 2:",rights:["Setează pe 1 bitul 2 la adresa 7."],wrongs:["Setează pe 1 bitul 7 la adresa 2.","Setează pe 0 bitul 7 la adresa 2.","Setează pe 0 bitul 2 la adresa 7.","Stochează la adresa 2 valoarea 7.","Stochează la adresa 7 valoarea 2."],feedback:""},26:{question:"Magistrala de comunicație SPI:",rights:["Este o magistrală sincronă de transfer a datelor"],wrongs:["Are o topologie multi-master, multi-slave","Are o schemă de adresare pe 8 biți","Permite comunicația la distanțe mari","Are o viteză de transmisie de maxim 9600 biți pe secundă"],feedback:"SPI este un protocol de comunicare sincron (i.e. folosește un semnal de ceas)."},27:{question:"Magistrala de comunicație serială RS232:",rights:["Permite conectarea punct-la-punct a două dispozitive de calcul"],wrongs:["Are o schemă de adresare pe 8 biți","Implementează un mecanism CSMA-CD","Folosește baud rate pentru a calcula distanța optimă de transmisie","Stă la baza tuturor rețelelor de calculatoare"],feedback:"RS232 este un protocol de comunicare punct-la-punct."},28:{question:"Magistrala de comunicație serială sincronă SPI:",rights:["Permite selectarea dispozitivului slave printr-un semnal de chip-select"],wrongs:["Are un baud rate de maxim 115200kbps","Este folosită in retelele 5G","Alocă o adresă de 16 biți pentru orice dispozitiv slave","Permite interconectarea mai multor dispozitive master"],feedback:"SPI este un protocol de comunicare single-master, multi-slave, unde slave-ul activ este selectat printr-un semnal numit chip-select."},29:{question:"Nicușor optimizează programul în C de mai jos pentru o execuție mai rapidă. A procedat corect?\n<img src='data:image/png;base64,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' />",rights:["Nu"],wrongs:["Da"],feedback:"Prima variantă este mai rapidă fiindcă accesează matricea x în ordinea în care este stocată în memorie."},30:{question:"Nicușor optimizează programul în C de mai jos pentru o execuție mai rapidă. A procedat corect?\n<img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADjBAMAAAAyHUZYAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAYUExURf///+Pk5bm8v56ip0JITGtwcg0dIIWJi0tIBYMAAAT7SURBVHja7ZvfV6pKFMf38ENeUen0igbHVyqr1wijV6Sk1zSbXrmZt3//zgyiyJGSE7C6tb9rFTGgH/eeYWbv3AOA+qLq93RxtGb1MSRKn/iR0Kv6IIQOqMlhc6jTEqCmNHEsOiZ3IZwNnIP7Gix5fYZ/R4/ndPqbUjOiIfUv6+gTwqyRn8B3fj9ErjFVptVbQvwXSjmE6q2HyGlROquhT6Ix7fcF5BeHzPq96i1ZUoe+nDBI5PlB5KjzI6eGPvHAoDMGUdkTEzkkonE9A7mdWJWc6DgNolCoz0yQ7VqVQLr9WpVAOk2469tCyN+Onw8g1k3m9A2kbKzSNdO/MsEYMUnaPEzbrA8gbnYxZiFXZoUnN6/rkDlz00wK8n7Q4vchD0AmjjwI+ZliwlmwuSjHiimJl6th0sIDZmnEIOJcY/apOsjMMPddyN3cM3qeeiUMNthy/yD8dHrC37p3F2siniRv4m5DhM2TfkBEeE7YixQdNGb84iNLbLBVR+NnNvtJIEfHHDI8Td1wIRwlPq8UXqXWGqANF93hrZlcfw9yAZaa9ASHiE9+uHjhEFdzspDk80uBt4FI1knHDveAWPC2ghipJR0RRsqBosvBBgJGLCBWQML0/n3dpY2CFYR1/N080/N3HshiSFt+0rO3AqIEIMa94nug7dPx2/Hkn1mDtDuRyOVlHw3hLb39ccPZzoDSyMXL1leYVnCq/9GQthipRM/HMpvfH7XuAbkOQI3B9jZX2HwBVgjyJRxci4bD9EqLPfczkCO9LIRNC5K5NQVxiM3XwWTeBPVivJ4WAY6TG/aHyBOHQyY5iD3m776MVxDii0X38B4U1jIWkMH+EKl9xSGH8QpydMoXE8Vd8nfvXKaWDIQlXodbwmdhBnkt4a7+LYfIKSRZsRTdEO5KIdBN50tmCYRl3aUsvC3IYPHPLkgyKQdJn5SGGLANSVYsRT/bASFu1pKzEpaMuLuk0UjPdrw6Eh0/mjtZCAxH3JLh/JJDzvWyQ5grt4raW4f1uFuPcavcc3IjVqGul1uLTkTrZLu1JVqloS6Py0H64iHo5P4LlZxLuVZJhJOkj1M9Qr58piVjpoWZFmZamGlhpoVJUAnIYkcSJEZmlUnQYkcStJrLqkqCyNLbkQRJk7g4CToonQQpvdsdSRBp3xcnQe3SSZCduGuTBJ0ci0vLKpOgPGRwwZMg9XZSZRJkkV1JUEtfFiRBxt8kQeoqCZpvJUHaaFKQBClNJEFGHUmQhknQGtLEd1qdJr7TQqFQKBQKhUKhUCgU6ieoowMM3XoZhD6ARF3JrBOi0Rmoz3Ae1AlRnp9gOH/xr+Hgnu9xqQXyy6UQ0UdKO9S/jGg9BkWOb6qPzF3KVJlGrl4LhF77gYDw3S1RPd6SKKXTBPLY79UEYQOr9cghz3x3S02Q1gy0OYMotB3RuCbIWm3c3YJCoSpR97RWrWKVRgKi7wr5bPmCXgCpsirKigsgVVZFhUXuqrIqqiCkrrYqyi22pLKqKDsuhlRWFVVQElRxVdQ77qquKsrd52H8bFVUuNcT/8mqqKHTwLRCzJ81CyNkP0hbjFSSG6+4/2QHBPeflHIX7j/B/Se4/wQh/89F6wfXC9tN1AsTrBfGeuFqFi2sF0bIV4aQJiCq24S7LpqADJqA2E1A1HEDEEP/Ln0y+C5DWLtqACLpTbirATXynRbqK+k/Ql+7jwqE5oYAAAAASUVORK5CYII=' />",rights:["Da"],wrongs:["Nu"],feedback:"A doua variantă este mai rapidă fiindcă are mai puține bucle."},31:{question:"Nicușor optimizează programul în C de mai jos pentru o execuție mai rapidă. A procedat corect?\n<img src='data:image/png;base64,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' />",rights:["Da"],wrongs:["Nu"],feedback:"A doua variantă este mai rapidă fiindcă are mai puține bucle."},32:{question:"Nicușor optimizează programul în C de mai jos pentru o execuție mai rapidă. A procedat corect?\n<img src='data:image/png;base64,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' />",rights:["Nu"],wrongs:["Da"],feedback:"Prima variantă este mai rapidă fiindcă nu trebuie să calculăm rezultatele temporare i + 1, i + 2 si i + 3."},33:{question:"Nicușor optimizează programul în C de mai jos pentru o execuție mai rapidă. A procedat corect?\n<img src='data:image/png;base64,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' />",rights:["Nu"],wrongs:["Da"],feedback:"Prima variantă este mai rapidă fiindcă vectorii a, b și c sunt accesați în ordinea în care sunt stocați in memorie. În varianta a doua ei sunt accesați în aceeași ordine, elementele lor vor putea fi găsite în cache, deci apelurile către prefetch vor adăuga doar overhead."},34:{question:"Nicușor optimizează programul în C de mai jos pentru o execuție mai rapidă. A procedat corect?\n<img src='data:image/png;base64,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' />",rights:["Nu"],wrongs:["Da"],feedback:"Prima variantă este mai rapidă fiindcă matricea A este accesată complet în ordinea în care este stocată în memorie. În a doua variantă niciună dintre matrici nu este accesată în aceasta ordine."},35:{question:"Nicușor optimizează programul în C de mai jos pentru o execuție mai rapidă. A procedat corect?\n<img src='data:image/png;base64,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' />",rights:["Da"],wrongs:["Nu"],feedback:"A doua variantă este mai rapidă fiindcă face mai puține accesuri la vectorul a."},36:{question:"Nicușor optimizează programul în C de mai jos pentru o execuție mai rapidă. A procedat corect?\n<img src='data:image/png;base64,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' />",rights:["Nu"],wrongs:["Da"],feedback:"Prima variantă este mai rapidă fiindcă are primii 10 termeni ai șirului factorial pre-calculați."},37:{question:"O locație de memorie și una mapată într-un periferic pot fi accesate simultan de către un procesor.",rights:["Fals"],wrongs:["Adevărat"],feedback:"Perifericele și memoria sunt mapate în același spațiu de adresă, deci nu pot fi accesate simultan."},38:{question:"O magistrala de comunicație serială:",rights:["Necesita un control mai complex decât o magistrală paralelă"],wrongs:["Poate transfera date doar asincron","Permite doar comunicarea punct la punct","Are limitări puternice de lățime de bandă","Necesită în general un număr mare de linii de comunicație"],feedback:"Un protocol de comunicare serial necesită un control mai complex pentru, spre exemplu, determinarea biților transmiși și a numărului acestora"},39:{question:"O memorie cache cu linii de 32 octeți lungime este organizată în 32 de seturi a câte 32 linii. Dacă adresarea se face la nivel de octet, cu\nadrese pe 32 de biți, care este dimensiunea în biți a tag-ului pentru fiecare linie de cache?",rights:["22"],wrongs:["19","17","18","21","20"],feedback:"32 - log2(32 * 32) = 22"},40:{question:"O memorie cache cu linii de 8 octeți lungime este organizată în 128 de seturi a câte 4 linii. Dacă adresarea se face la nivel de octet, cu adrese\npe 32 de biți, care este dimensiunea în biți a tag-ului pentru fiecare linie de cache?",rights:["22"],wrongs:["21","23","20","19"],feedback:"32 - log2(128 * 8) = 22"},41:{question:"Parcurgerea unei liste înlănțuite alocate contiguu în memorie exploatează:",rights:["Localitatea spațială"],wrongs:["Niciuna","Localitatea temporală","Nu se poate determina","Ambele localități"],feedback:"Lista este alocată contiguu în memorie, iar parcurgere rezultă în acces secvențial. Asta înseamnă că, dacă am accesat o adresă din listă, este probabil să vrem să accesăm și adresele următoare sau precedente."},42:{question:"Parcurgerea unui vector exploatează:",rights:["Localitatea spațială"],wrongs:["Localitatea temporală","Niciuna","Nu se poate determina","Ambele localități"],feedback:"Vectorii sunt ținuți contiguu în memorie iar parcugerea unui vector rezultă în acces secvențial. Asta înseamnă că, dacă am accesat o adresă din vector, este probabil să vrem să accesăm și adresele următoare sau precedente."},43:{question:"Pentru a maximiza performanța, TLB-urile sunt organizate de obicei sub forma unor cache-uri mapate direct.",rights:["Fals"],wrongs:["Adevărat"],feedback:"TLB-urile sunt de obicei organizate sub forma unor cache-uri set-asociative sau complet-asociative."},44:{question:"Presupuneți că acum 20 de ani ați scris un cod pentru o arhitectura x86 care petrecea jumătate din timp cu accese la memorie și cealaltă\njumătate făcând calcule. Dacă am rula același cod astăzi pe o arhitectură x86-compatible, cel mai probabil el ar:",rights:["Petrece mai mult timp cu accesul memoriei"],wrongs:["Menține aceeași proporție 50-50% a timpilor de rulare","Petrece mai mult timp făcând calcule","Exporta calculele in Cloud","Nu se poate determina"],feedback:"Viteza procesoarelor a crescut mai mult decât viteza memoriilor."},45:{question:"Problema cu un cache ce folosește o politică Write-Back este:",rights:["Nu menține consistența datelor din memoriile unui sistem multi-procesor"],wrongs:["Riscă să ocupe toată lățimea de bandă a magistralei procesor-memorie","Nicio opțiune","Scade performanța unui cache","Necesită un TLB separat pentru a asigura transferul de date"],feedback:"Cum datele modificate în cache nu sunt modificate imediat și în RAM, într-un sistem multi-procesor trebuie sa implementăm un protocol de coerență a datelor dacă folosim un cache Write-Back."},46:{question:"Problema cu un cache ce folosește o politică Write-Through este:",rights:["Scade performanța cache-ului"],wrongs:["Nu poate fi folosită în sisteme multi-procesor, chiar dacă CPU-urile fac snooping pentru un update","Nici o variantă","Necesită un overhead suplimentar în cache pentru a contabiliza blocurile care au fost modificate","Riscă să lase memoria principală invalidă pentru o perioada lungă de timp"],feedback:"Faptul că la fiecare scriere cache-ul trebuie să facă o scriere și în RAM înseamnă că nu poate fi la fel de rapid ca un cache care nu trebuie să facă asta."},47:{question:"Procesorul poate să citească din RAM în timp ce RAM-ul este reîmprospătat.",rights:["Fals"],wrongs:["Adevărat"],feedback:"RAM-ul este inaccesibil în timpul unui refresh."},49:{question:"Translatarea adreselor din memoria virtuală este utilă chiar și atunci când dimensiunea totală a memoriei virtuale este mai mică decât\ndimensiunea memoriei fizice",rights:["Adevărat"],wrongs:["Fals"],feedback:"Memoria virtuală este utilă chiar și atunci când spațiul de adresă virtual este mai mic decât spațiul de adresă fizic, spre exemplu, pentru separația spațiului de adresă între procese."},50:{question:"Un TLB:",rights:["Ajută la reducerea timpului de acces la o locație din memoria principală"],wrongs:["Nicio opțiune","Are un număr limitat de acționări pe ciclu de memorie","Nu poate fi folosit în sisteme multi-procesor, pentru că produce inconsistențe la accesul memoriei partajate","Poate fi folosit fără probleme și pentru accesul la locații de I/O"],feedback:"TLB-ul ne ajută să facem mai repede translatarea dintr-o adresă virtuală într-o adresă fizică, deci face accesul la memoria principală mai rapid."},51:{question:"Un cache mapat direct este organizat intern pe 16384 linii cu lățime de 64 octeți. Adresele cu care lucrează memoria cache sunt pe 32 de\nbiți. Care este lungimea în biți a tag-ului?",rights:["12"],wrongs:["15","13","14","11"],feedback:"32 - log2(16384 * 64) = 12"},52:{question:"Un cache mapat direct este organizat intern pe 4096 linii cu lățime de 32 octeți. Adresele cu care lucrează memoria cache sunt pe 32 de\nbiți. Care este lungimea în biți a tag-ului?",rights:["15"],wrongs:["16","17","14","18"],feedback:"32 - log2(4096 * 32) = 15"},53:{question:"Un sistem cu cache L1 si L2 are un hit rate de 80% din L1 și de 90% din L2. Care este miss rate-ul global?",rights:["2%"],wrongs:["20%","0.02%","98%","9.8%"],feedback:"1 - 0.8 - 0.2 * 0.9 = 0.02"},54:{question:"Un sistem cu cache L1 si L2 are un hit rate de 90% din L1 și de 95% din L2. Care este miss rate-ul global?",rights:["0.5%"],wrongs:["95%","9.5%","5%","0.05%"],feedback:"1 - 0.9 - 0.1 * 0.95 = 0.005"},55:{question:"Un sistem cu cache L1 si L2 are un hit rate de 95% din L1 și de 98% din L2. Care este miss rate-ul global?",rights:["0.1%"],wrongs:["0.99%","0.01%","1%","99%"],feedback:"1 - 0.95 - 0.05 * 0.98 = 0.001"},56:{question:"Un sistem cu cache L1 si L2 are un hit rate de 98% din L1 și de 99% din L2. Care este miss rate-ul global?",rights:["0.02%"],wrongs:["9.8%","98%","2%","20%"],feedback:"1 - 0.98 - 0.02 * 0.99 = 0.0002"},57:{question:"Un sistem de calcul are două niveluri de cache cu următoarele specificații:\nLatența de acces la L1 este de 2ns iar rata de hit locală este 93%\nLatența de acces din L1 în L2 este de 8ns iar rata de hit locală este de 94%\nLatența de acces din L2 în memoria RAM este de 300ns\nCare este timpul mediu de acces la memorie?",rights:["3.82ns"],wrongs:["0.382ns","38.2ns","382ns","3820ns"],feedback:"0.93 * 2ns + 0.07 * (0.94 * 10ns + 0.06 * 310ns) = 3.82ns"},58:{question:"Un sistem de calcul are două niveluri de cache cu următoarele specificații:\nLatența de acces la L1 este de 3ns iar rata de hit locală este 95%\nLatența de acces din L1 în L2 este de 9ns iar rata de hit locală este de 98%\nLatența de acces din L2 în memoria RAM este de 600ns\nCare este timpul mediu de acces la memorie?",rights:["4.05ns"],wrongs:["4050ns","0.405ns","40.5ns","405ns"],feedback:"0.95 * 3ns + 0.05 * (0.98 * 12ns + 0.02 * 612ns) = 4.05ns"},59:{question:"Un sistem de calcul are două niveluri de cache cu următoarele specificații:\nLatența de acces la L1 este de 4ns iar rata de hit locală este 90%\nLatența de acces din L1 în L2 este de 10ns iar rata de hit locală este de 95%\nLatența de acces din L2 în memoria RAM este de 500ns\nCare este timpul mediu de acces la memorie?",rights:["7.5ns"],wrongs:["0.75ns","0.075ns","750ns","75ns"],feedback:"0.9 * 4ns + 0.1 * (0.95 * 14ns + 0.05 * 514ns) = 7.5ns"},60:{question:"Un sistem de calcul are două niveluri de cache cu următoarele specificații:\nLatența de acces la L1 este de 5ns iar rata de hit locală este 80%\nLatența de acces din L1 în L2 este de 12ns iar rata de hit locală este de 90%\nLatența de acces din L2 în memoria RAM este de 400ns\nCare este timpul mediu de acces la memorie?",rights:["15.4ns"],wrongs:["0.154ns","1.54ns","154ns","1540ns"],feedback:"0.8 * 5ns + 0.2 * (0.9 * 17ns + 0.1 * 417ns) = 15.4ns"},61:{question:"Un sistem de calcul ce are doar un L1 cache de 128kB este <b>întotdeauna</b> mai rapid decât un sistem ce are L1 și L2 cache cu dimensiunea\ntotală de 128kB.",rights:["Fals"],wrongs:["Adevărat"],feedback:"<b>Nu</b> putem zice că un sistem cu un nivel de cache este <b>întotdeauna</b> mai rapid ca un sistem cu două niveluri de cache. Chiar dacă primul sistem are mai mult cache rapid (L1), există cazuri în care asta nu îl ajută să atingă o performanță mai mare ca al doilea sistem. Spre exemplu, un program poate să nu acceseze memoria deloc, caz în care cele două sisteme sunt la fel de rapide."},62:{question:"În toate sistemele multiprocesor, timpul de acces la memorie este identic pentru fiecare procesor.",rights:["Fals"],wrongs:["Adevărat"],feedback:"În cazul sistemelor NUMA (Non-Uniform Memory Access) timpul de acces la memorie diferă de la un procesor la altul."},63:{question:"Știind că valoarea din Stack Pointer este 0xb2, ce valoarea se va afla în el după ce se execută o instrucțiune RET?",rights:["0xb4"],wrongs:["0xb1","0xb3","0xb0"],feedback:""},64:{question:"Știind că în R20 se afla valoarea 58, iar în R21 se afla valoarea 197, ce valoare va avea flagul Z după ce se executa un AND între cele doua\nregistre?",rights:["1"],wrongs:["0"],feedback:""},65:{question:"Știm că la adresa 69 dintr-o memorie SSRAM se afla valoarea 47. Se considera următoarele valori pentru porturile acestei memorii:\nCS = 1\nWE = 1\nOE = 0\nADDR = 69\nDATA = 12 (intrare/ieșire).\nCe se va afla la adresa 69 după acest ciclu?",rights:["12, fiindcă se face o operație de scriere."],wrongs:["47, fiindcă se face o operație de citire, nu de scriere.","47, fiindcă nu este selectat chipul de memorie"],feedback:""}};
+        function insertFilterButtons(chunkSize) {
+            let questionsNumber = Object.keys(RIGHTS).length;
+
+            let rowDiv = document.createElement("div")
+            rowDiv.classList.add('row', "filterDiv");
+
+            for (let i = 0; i < questionsNumber; i += chunkSize) {
+                let intervalButton = document.createElement("button");
+                intervalButton.classList.add("btn", "btn-light","col-4","mr-1", "filterButton");
+                intervalButton.setAttribute("start", i);
+                intervalButton.setAttribute("end", i + chunkSize < questionsNumber ? i + chunkSize : questionsNumber);
+
+                intervalButton.textContent = (i + 1).toString() + "-" + (i + chunkSize < questionsNumber ? i + chunkSize : questionsNumber).toString()
+                rowDiv.appendChild(intervalButton);
+            }
+            document.body.appendChild(rowDiv);
+        }
+        insertFilterButtons(Math.ceil(Object.keys(RIGHTS).length / 6));
+
+
+        /* Returns an array of strings */
+        function getShuffledQuestionKeys(idxStart, idxEnd) {
+            let questionsKeys = Object.keys(RIGHTS);
+            if (idxStart !== undefined && idxEnd != undefined)
+                questionsKeys = questionsKeys.slice(idxStart, idxEnd);
+            return questionsKeys.sort((a, b) => 0.5 - Math.random());
+        }
+
+        /* Returns an array of strings */
+        function getShuffledOptions(options) {
+            return options
+                .map(value => ({ value, sort: Math.random() }))
+                .sort((a, b) => a.sort - b.sort)
+                .map(({ value }) => value)
+        }
+
+        function insertQuestions(idxStart, idxEnd){
+            let quizzesMain = document.createElement('main')
+            let questionNumber = 0;
+            getShuffledQuestionKeys(idxStart, idxEnd).forEach(questionID => {
+                RIGHTS[questionID].rightids = [];
+                RIGHTS[questionID].wrongids = [];
+
+                let quizDiv = document.createElement('div')
+                quizDiv.classList.add('quizDiv', "d-grid", "gap-1");
+                quizDiv.setAttribute('data-id', questionID);
+
+                let questionParagraph = document.createElement('p');
+                questionParagraph.classList.add("question");
+                questionParagraph.innerHTML = `${++questionNumber}. ${RIGHTS[questionID].question.replace(/(?:\r\n|\r|\n)/g, '<br>')}`;
+                quizDiv.appendChild(questionParagraph);
+
+                let optionID = 0;
+                let allOptions = RIGHTS[questionID].rights;
+                allOptions = allOptions.concat(RIGHTS[questionID].wrongs)
+                getShuffledOptions(allOptions).forEach(optionText => {
+                    optionButton = document.createElement('button');
+                    optionButton.classList.add("optionButton", "btn", "btn-light");
+                    optionButton.innerHTML = optionText;
+
+                    if (RIGHTS[questionID].rights.includes(optionText))
+                        RIGHTS[questionID].rightids.push(optionID.toString());
+                    else if (RIGHTS[questionID].wrongs.includes(optionText))
+                        RIGHTS[questionID].wrongids.push(optionID.toString());
+                    optionButton.setAttribute('data-id', optionID++)
+                    quizDiv.appendChild(optionButton);
+                });
+
+                quizzesMain.appendChild(quizDiv);
+            });
+            document.body.appendChild(quizzesMain);
+        }
+        insertQuestions();
+
+
+
+
+
+
+        const onClick = (event) => {
+        const element = event.target;
+        const elementID = element.getAttribute('data-id');
+        const elementParent = element.parentNode;
+        const elementParentID = elementParent.getAttribute('data-id');
+        const isFilterButton = element.classList.contains("filterButton");
+        const isOptionButton = element.classList.contains("optionButton");
+        const isQuestion = element.classList.contains('question');
+        const isOptionButtonParentAnswered = elementParent.hasAttribute('question-already-answered');
+        
+        if (isQuestion) {
+            elementParent.scrollIntoView({
+                behavior: "smooth",
+                block: "center",
+                inline: "nearest"
+            });
+            navigator.clipboard.writeText(element.innerText.split(". ").slice(1).join(". "));
+        }
+
+        if (isFilterButton) {
+            let main = document.querySelector('main'); 
+            main.parentNode.removeChild(main);
+            insertQuestions(parseInt(element.getAttribute('start')), parseInt(element.getAttribute('end')));
+            return;
+        } 
+        if (isOptionButton) {
+            if (isOptionButtonParentAnswered) return;
+
+            element.setAttribute('chosen', "");
+            const selectedOptionButtons = elementParent.querySelectorAll("button[chosen]").length;
+            const numberOfRightAnswers = RIGHTS[elementParentID].rightids.length;
+            if (selectedOptionButtons === numberOfRightAnswers) {
+            elementParent.setAttribute('question-already-answered', "");
+            elementParent.scrollIntoView({
+                behavior: "smooth",
+                block: "start",
+                inline: "nearest"
+            });
+
+            let rightsGiven = 0;
+            elementParent.querySelectorAll("button").forEach(option => {
+                option.classList.add("pointerNone");
+                const isRight = RIGHTS[elementParentID].rightids.includes(option.getAttribute('data-id'));
+
+                if (option.hasAttribute('chosen')) {
+                    option.classList.remove("btn-light");
+                    if (isRight) {
+                        rightsGiven++;
+                        option.classList.add("btn-success");
+                    } else {
+                        option.classList.add("btn-danger");
+                    }
+                } else if (isRight) {
+                    option.classList.remove("btn-light");
+                    option.classList.add("btn-success", "makeOpaque");
+                }
+                  else
+                    option.classList.add("btn-white");
+            });
+
+            let percentageRight = (100 * rightsGiven) / numberOfRightAnswers;
+            let percentageWrong = 100 - percentageRight;
+            const progressBar = `
+                <section class="progress" style="height: 80%; margin-top: 3px; opacity: 0.9">
+                <section class="progress-bar" style="width: 1%; background: white"></section>
+                <section class="progress-bar-striped bg-success" style="width: ${percentageRight * 0.99}%; text-align: center; color: white">${rightsGiven}</section>
+                <section class="progress-bar-striped bg-danger" style="width: ${percentageWrong * 0.99}%; text-align: center; color: white">${numberOfRightAnswers - rightsGiven}</section>
+                <section class="progress-bar" style="width: 1%; background: white"></section>
+                </section>`;
+
+            elementParent.innerHTML += progressBar;
+            if (RIGHTS[elementParentID].feedback != "")
+                elementParent.innerHTML += `<p class="explanation">${RIGHTS[elementParentID].feedback}</p>`
+            }
+        }
+        }
+        window.addEventListener('click', onClick);
+    }
+
+    
+
+    </script>
+
+</body>
+</html>
+</html>

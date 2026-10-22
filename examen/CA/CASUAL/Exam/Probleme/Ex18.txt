@@ -1,0 +1,34 @@
+    rjmp main
+
+set_sum:
+    pop R16
+    pop R17
+    pop R18
+    pop R19
+    push R17
+    push R16
+
+    or R18, R19 ; reuniunea seturilor
+    ldi R20, 0 ; suma numerelor din reuniune
+    ldi R21, 1 ; masca curenta
+    ldi R22, 0 ; numarul curent
+    ldi R25, 1
+
+add_num:
+    mov R23, R18
+    and R23, R21 ; and intre set si masca
+    breq no_add
+    add R20, R22
+
+no_add:
+    add R22, R25 ; incrementare numar curent
+    add R21, R21 ; actualizare masca
+    brne add_num
+    ret
+
+main:
+    ldi R24, 81
+    push R24
+    ldi R24, 7
+    push R24
+    rcall set_sum

@@ -1,0 +1,67 @@
+COMPILER = vlogcomp
+INTERPRETER = fuse
+SIMULATOR = isimgui
+FLAGS =
+TOP_MODULE = task3
+TOP_SIM_MODULE = test_$(TOP_MODULE)
+OTHER_SOURCES = ../task0/task01.v ../task1/task1.v ../task2/task2.v ../utils/debouncer.v ../utils/display7LED.v
+DUMP_VCD_FILE = test.vcd
+TCL_FILE_RUN = isim.tcl
+WDB_FILE = isim
+
+all: simulation
+
+build:
+	$(COMPILER) $(FLAGS) $(TOP_MODULE).v $(TOP_SIM_MODULE).v $(OTHER_SOURCES)
+
+run: build
+	$(INTERPRETER) $(TOP_SIM_MODULE) -o $(TOP_SIM_MODULE).exe
+	bash -c "source /opt/Xilinx/14.7/ISE_DS/settings64.sh && ./$(TOP_SIM_MODULE).exe -tclbatch $(TCL_FILE_RUN) -wdb $(WDB_FILE).wdb"
+
+simulation: run
+	$(SIMULATOR) -view $(TOP_SIM_MODULE).wcfg -wdb $(WDB_FILE).wdb
+
+clean:
+	rm -rf isim $(TOP_SIM_MODULE).exe $(WDB_FILE).wdb $(TOP_SIM_MODULE).wcfg \
+	fuse.log fuse.xmsgs isim.log $(DUMP_VCD_FILE) fuseRelaunch.cmd \
+	_xmsgs xst .lso $(TOP_MODULE)_xst* $(TOP_MODULE).lso $(TOP_MODULE).ngc \
+	xflow* xlnx_auto_0_xdb $(TOP_MODULE)_* *.html *.log $(TOP_MODULE).b* \
+	$(TOP_MODULE).ll $(TOP_MODULE).m* $(TOP_MODULE).n* $(TOP_MODULE).t* \
+	$(TOP_MODULE).pa* $(TOP_MODULE).x* $(TOP_MODULE).un* $(TOP_MODULE).d* \
+	netlist.lst $(TOP_MODULE).pcf $(TOP_MODULE).ptwx
+
+# you need to have $(TOP_MODULE).ucf inside the directory ; https://support.xilinx.com/s/article/42911?language=en_US
+bitstream:
+#	xflow -p xc6slx16-3-csg324 -synth xst_verilog.opt $(TOP_MODULE).prj -implement balanced.opt -config bitgen.opt
+#
+# Command line for xst
+#
+	xst -ifn $(TOP_MODULE).scr -ofn $(TOP_MODULE)_xst.log -intstyle xflow 
+
+#
+# Command line for ngdbuild
+#
+	ngdbuild -p xc6slx16-3-csg324 -nt timestamp -intstyle xflow $(TOP_MODULE).ngc $(TOP_MODULE).ngd -uc $(TOP_MODULE).ucf
+
+#
+# Command line for map
+#
+	map -o $(TOP_MODULE)_map.ncd -intstyle xflow $(TOP_MODULE).ngd $(TOP_MODULE).pcf 
+
+#
+# Command line for par
+#
+	par -w -ol std -intstyle xflow $(TOP_MODULE)_map.ncd $(TOP_MODULE).ncd $(TOP_MODULE).pcf 
+
+#
+# Command line for post_par_trce
+#
+	trce -e 3 -intstyle xflow -xml $(TOP_MODULE).twx $(TOP_MODULE).ncd $(TOP_MODULE).pcf 
+
+#
+# Command line for bitgen
+#
+	bitgen -l -w -m -intstyle xflow $(TOP_MODULE).ncd 
+# alternative openocd https://tomverbeure.github.io/2019/09/15/Loading-a-Spartan-6-bitstream-with-openocd.html
+fpga:
+	impact -b $(TOP_MODULE).bit -port auto

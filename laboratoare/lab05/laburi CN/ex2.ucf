@@ -1,0 +1,17 @@
+NET "o_r_AN0" LOC = N16;
+NET "o_r_AN1" LOC = N15;
+NET "o_r_AN2" LOC = P18;
+NET "o_r_AN3" LOC = P17;
+
+NET "o_r_CA" LOC = T17;
+NET "o_r_CB" LOC = T18;
+NET "o_r_CC" LOC = U17;
+NET "o_r_CD" LOC = U18;
+NET "o_r_CE" LOC = M14;
+NET "o_r_CF" LOC = N14;
+NET "o_r_CG" LOC = L14;
+NET "o_r_DP" LOC = M13;
+
+NET "i_w_clk" LOC = V10;
+NET "i_w_reset" LOC = C4;
+

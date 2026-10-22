@@ -1,0 +1,7 @@
+verilog work task3.v
+verilog work ../task0/task01.v
+verilog work ../task1/task1.v
+verilog work ../task2/task2.v
+verilog work ../utils/debouncer.v
+verilog work ../utils/display7LED.v
+verilog work /opt/Xilinx/14.7/ISE_DS/ISE//verilog/src/glbl.v

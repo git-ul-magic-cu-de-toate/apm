@@ -1,0 +1,9 @@
+run
+-ifn "task3.prj"
+-ifmt Mixed
+-top task3
+-ofn task3
+-ofmt ngc
+-p xc6slx16-3-csg324
+-opt_level 1
+-opt_mode SPEED

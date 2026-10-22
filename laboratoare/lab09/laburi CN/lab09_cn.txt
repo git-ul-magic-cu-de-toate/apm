@@ -1,0 +1,53 @@
+Hazarde de date
+
+RAW
+-> 
+P1 : fara pipeline
+add r1, r2 => r1 = 3
+add r3, r1 => r3 = 6
+
+face writeback-ul dupa execute
+P2 : cu pipeline
+add r1, r2 => r1 = 3
+add r3, r1 => r3 = 4
+
+WAW (Write after Write)
+->
+add r1, 4
+add r1, 5
+(ambele sunt in paralel, te intereseaza valoarea?)
+
+WAR (Write after read)
+->
+asemanator
+
+Hazard de control
+(legat de jump-uri)
+
+j cod1
+
+cod1:
+add r1,4
+add r1,5 
+
+solutie:
+
+NOP-uri (Not an instruction & Bubbles)
+RAW:
+IF ID EX MEM WD
+  IF ID ID ID EX
+    IF IF IF ID
++ reordonarea instructiunilor
+
+JCONTR:
+IF ID EX MEM WB
+ IF IF IF IF IF
+
+Branch predictor:
+for (int i = 0; i < n; i++) {
+ castiga ciclii de ceas considerand i < n adevarata si cand n-o mai considera, pa pa tot ce e dupa
+}
+
+Hazard structural:
+
+more hardware boys

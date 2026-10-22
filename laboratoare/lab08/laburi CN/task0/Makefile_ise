@@ -1,0 +1,26 @@
+COMPILER = vlogcomp
+INTERPRETER = fuse
+SIMULATOR = isimgui
+FLAGS =
+TOP_MODULE = task0
+TOP_SIM_MODULE = test_$(TOP_MODULE)
+OTHER_SOURCES =
+DUMP_VCD_FILE = test.vcd
+TCL_FILE_RUN = isim.tcl
+WDB_FILE = isim
+
+all: simulation
+
+build:
+	$(COMPILER) $(FLAGS) $(TOP_MODULE).v $(TOP_SIM_MODULE).v $(OTHER_SOURCES)
+
+run: build
+	$(INTERPRETER) $(TOP_SIM_MODULE) -o $(TOP_SIM_MODULE).exe
+	bash -c "source /opt/Xilinx/14.7/ISE_DS/settings64.sh && ./$(TOP_SIM_MODULE).exe -tclbatch $(TCL_FILE_RUN) -wdb $(WDB_FILE).wdb"
+
+simulation: run
+	$(SIMULATOR) -view $(TOP_SIM_MODULE).wcfg -wdb $(WDB_FILE).wdb
+
+clean:
+	rm -rf isim $(TOP_SIM_MODULE).exe $(WDB_FILE).wdb $(TOP_SIM_MODULE).wcfg \
+	fuse.log fuse.xmsgs isim.log $(DUMP_VCD_FILE) fuseRelaunch.cmd 

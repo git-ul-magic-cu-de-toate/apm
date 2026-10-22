@@ -1,0 +1,22 @@
+COMPILER = iverilog
+INTERPRETER = vvp
+SIMULATOR = gtkwave
+FLAGS = -Wall -Winfloop
+TOP_MODULE = task1
+TOP_SIM_MODULE = test_$(TOP_MODULE)
+OTHER_SOURCES =
+DUMP_VCD_FILE = test.vcd
+
+all: build
+
+build:
+	$(COMPILER) $(FLAGS) $(TOP_MODULE).v $(TOP_SIM_MODULE).v $(OTHER_SOURCES) -o $(TOP_MODULE).vvp
+
+run: build
+	$(INTERPRETER) $(TOP_MODULE).vvp
+
+simulation: run
+	$(SIMULATOR) $(DUMP_VCD_FILE)
+
+clean:
+	rm $(TOP_MODULE).vvp $(DUMP_VCD_FILE)

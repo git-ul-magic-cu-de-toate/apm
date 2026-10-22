@@ -1,0 +1,38 @@
+# TODO : ADD -> NET "wire_name"   LOC = board_pin;
+# 7LED segment display pins
+NET "o_w_AN0"   LOC = N16;
+NET "o_w_AN1"   LOC = N15;
+NET "o_w_AN2"   LOC = P18;
+NET "o_w_AN3"   LOC = P17;
+NET "o_w_CA"    LOC = T17;
+NET "o_w_CB"    LOC = T18;
+NET "o_w_CC"    LOC = U17;
+NET "o_w_CD"    LOC = U18;
+NET "o_w_CE"    LOC = M14;
+NET "o_w_CF"    LOC = N14;
+NET "o_w_CG"    LOC = L14;
+NET "o_w_DP"    LOC = M13;
+# reset, clk and button
+NET "i_w_reset" LOC = B8;
+NET "i_w_clk"   LOC = V10;
+NET "i_w_op_sel[0]"    LOC = C4;
+NET "i_w_op_sel[1]"    LOC = D9;
+NET "i_w_op_sel[2]"    LOC = A8;
+# switch inputs
+NET "i_w_b[3]"    	LOC = T10;
+NET "i_w_b[2]"    	LOC = T9;
+NET "i_w_b[1]"    	LOC = V9;
+NET "i_w_b[0]"    	LOC = M8;
+NET "i_w_a[3]"    	LOC = N8;
+NET "i_w_a[2]"    	LOC = U8;
+NET "i_w_a[1]"    	LOC = V8;
+NET "i_w_a[0]"    	LOC = T5;
+#simple led for output in binary
+NET "o_w_out[0]"    LOC = U16;
+NET "o_w_out[1]"    LOC = V16;
+NET "o_w_out[2]"    LOC = U15;
+NET "o_w_out[3]"    LOC = V15;
+NET "o_w_out[4]"    LOC = M11;
+NET "o_w_out[5]"    LOC = N11;
+NET "o_w_out[6]"    LOC = R11;
+NET "o_w_out[7]"    LOC = T11;

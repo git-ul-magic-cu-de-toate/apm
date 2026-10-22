@@ -1,0 +1,36 @@
+`timescale 1ns / 1ps
+
+module test_cpu;
+
+    // Inputs
+    reg reset;
+    reg clk;
+
+    // Instantiate the Unit Under Test (UUT)
+    cpu uut (
+        .reset(reset),
+        .clk(clk)
+    );
+
+    always #5 clk = ~clk;
+
+    initial begin
+		$dumpfile("cpu_test_1.vcd");
+		$dumpvars;
+        // Initialize Inputs
+        reset = 1;
+        clk = 0;
+
+        // Wait 100 ns for global reset to finish
+        #100;
+
+        reset = 0;
+
+        #500
+        reset = 1;
+
+        $finish;
+    end
+
+endmodule
+

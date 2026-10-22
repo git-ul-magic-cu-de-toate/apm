@@ -1,0 +1,40 @@
+Vivado Simulator v2024.1
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+Copyright 2022-2024 Advanced Micro Devices, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2024.1/bin/unwrapped/win64.o/xelab.exe --incr --debug typical --relax --mt 2 -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip --snapshot RISC_V_TB_behav xil_defaultlib.RISC_V_TB xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+WARNING: [VRFC 10-3091] actual bit length 32 differs from formal bit length 1 for port 'ALU_OUT' [C:/Users/sandu/OneDrive/Desktop/Lucrari laborator APM/RISC_V_IF_ID/RISC_V_IF_ID/RISC_V_IF_ID.srcs/sources_1/new/MEM.v:44]
+Completed static elaboration
+Starting simulation data flow analysis
+WARNING: [XSIM 43-4099] "C:/Users/sandu/OneDrive/Desktop/Lucrari laborator APM/RISC_V_IF_ID/RISC_V_IF_ID/RISC_V_IF_ID.srcs/sources_1/new/ALU.v" Line 1. Module ALU doesn't have a timescale but at least one module in design has a timescale.
+WARNING: [XSIM 43-4099] "C:/Users/sandu/OneDrive/Desktop/Lucrari laborator APM/RISC_V_IF_ID/RISC_V_IF_ID/RISC_V_IF_ID.srcs/sources_1/new/ALU.v" Line 1. Module ALU doesn't have a timescale but at least one module in design has a timescale.
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.PC
+Compiling module xil_defaultlib.instruction_memory
+Compiling module xil_defaultlib.adder
+Compiling module xil_defaultlib.mux2_1
+Compiling module xil_defaultlib.IF
+Compiling module xil_defaultlib.IF_ID_reg
+Compiling module xil_defaultlib.hazard_detection
+Compiling module xil_defaultlib.control_path
+Compiling module xil_defaultlib.registers
+Compiling module xil_defaultlib.imm_gen
+Compiling module xil_defaultlib.ID
+Compiling module xil_defaultlib.pipeline_id_ex
+Compiling module xil_defaultlib.mux4_1
+Compiling module xil_defaultlib.ALUcontrol
+Compiling module xil_defaultlib.ALU
+Compiling module xil_defaultlib.EX
+Compiling module xil_defaultlib.forwarding
+Compiling module xil_defaultlib.pipeline_ex_mem
+Compiling module xil_defaultlib.data_memory
+Compiling module xil_defaultlib.branch_control
+Compiling module xil_defaultlib.MEM
+Compiling module xil_defaultlib.pipeline_mem_wb
+Compiling module xil_defaultlib.RISC_V
+Compiling module xil_defaultlib.RISC_V_TB
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot RISC_V_TB_behav
